@@ -1,0 +1,18 @@
+<html>
+  <body>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    Messages:
+    <pre id="servermessages"></pre>
+    <script>      
+      var socket = new WebSocket("ws://" + location.host + "/endpoint");
+      socket.onopen = function (event) {
+        socket.send("From Browser to Server"); 
+      };
+      socket.onmessage = function(event) {
+        $("#servermessages").append(event.data + "\n");
+      };
+    </script>
+  </body>
+</html>
