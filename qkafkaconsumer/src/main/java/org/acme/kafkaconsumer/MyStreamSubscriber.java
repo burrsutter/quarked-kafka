@@ -46,7 +46,10 @@ public class MyStreamSubscriber {
     @Outgoing("output")
     public Flowable<JsonObject> process(Flowable<JsonObject> input) {      
       // return input;
-      return input.doOnNext(json -> System.out.println("INPUT4: " + json + "\n"));
+      return input
+        .doOnError(e -> System.out.println("ERROR: " + e + "\n"))
+        .doOnNext(json -> System.out.println("INPUT4: " + json + "\n"))
+        ;
     }
 
     // @Incoming("input")
