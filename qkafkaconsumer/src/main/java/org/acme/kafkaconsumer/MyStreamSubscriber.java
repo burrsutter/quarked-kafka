@@ -22,6 +22,7 @@ import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.jboss.logging.Logger;
 
 import io.reactivex.Flowable;
+import io.reactivex.functions.Predicate;
 
 
 @ApplicationScoped
@@ -32,7 +33,7 @@ public class MyStreamSubscriber {
     @GET
     @Path("reset")
     public String reset() {
-      return "This is here to cause live reload: curl localhost:8083/reset";
+      return "!This is here to cause live reload: curl localhost:8083/reset";
     }
  
     // @Incoming("input")
@@ -76,15 +77,48 @@ public class MyStreamSubscriber {
     // }
 
     // skip messages that have a customer id ending in '8'
+    // @Incoming("input")
+    // @Outgoing("output")
+    // public Flowable<String> process(Flowable<String> input) {      
+    //   // return input;
+    //   return input  
+    //     .filter(stuff -> (Json.createReader(new StringReader(stuff)).readObject().getString("id")).endsWith("8"))        
+    //     .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
+    //     .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
+    //     ;
+    // }
+
+    // skip messages that have a customer id ending in '8'
     @Incoming("input")
     @Outgoing("output")
     public Flowable<String> process(Flowable<String> input) {      
       // return input;
       return input  
-        .filter(stuff -> (Json.createReader(new StringReader(stuff)).readObject().getString("id")).endsWith("8"))
+        .filter(stuff -> accept(stuff))
+        .map(stuff -> transform(stuff))        
         .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
         .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
         ;
+    }    
+
+    // accept only messages where custid ends in 8
+    private boolean accept(String msg) {
+      JsonReader jsonReader = Json.createReader(new StringReader(msg));
+      JsonObject myJsonObject = jsonReader.readObject();   
+      System.out.println("BURR: " + myJsonObject);
+      String id = myJsonObject.getString("id");
+      boolean isit8 = id.endsWith("8");
+      return isit8;
+    }
+
+    // transform the message
+    private String transform(String msg) {
+      JsonReader jsonReader = Json.createReader(new StringReader(msg));
+      JsonObject myJsonObject = jsonReader.readObject();   
+      String id = myJsonObject.getString("id");
+      JsonObjectBuilder builder = Json.createObjectBuilder();   
+      builder.add("custName", "Special K");
+      return builder.build().toString();
     }
 
     // Add a Customer Name to the output message
