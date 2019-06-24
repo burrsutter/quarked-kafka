@@ -21,7 +21,7 @@ public class ProducerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject hello() {    
+    public JsonObject produce() {    
                 
         JsonArray orders = Json.createArrayBuilder()
         .add(Json.createObjectBuilder()

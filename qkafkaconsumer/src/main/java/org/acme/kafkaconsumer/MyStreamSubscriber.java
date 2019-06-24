@@ -2,6 +2,7 @@ package org.acme.kafkaconsumer;
 
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.json.Json;
@@ -23,6 +24,7 @@ import org.jboss.logging.Logger;
 
 import io.reactivex.Flowable;
 import io.reactivex.functions.Predicate;
+import io.smallrye.reactive.messaging.kafka.KafkaMessage;
 
 
 @ApplicationScoped
@@ -40,7 +42,7 @@ public class MyStreamSubscriber {
     // public void process(String msg) {
     //     LOG.info("INPUT1: " + msg);
     // }     
-
+    
     // @Incoming("input")
     // public CompletionStage<Void> process(KafkaMessage<String,String> msg) {
     //     LOG.info("INPUT2: " + msg.getPayload());
@@ -101,7 +103,7 @@ public class MyStreamSubscriber {
         ;
     }    
 
-    // accept only messages where custid ends in 8
+    // // accept only messages where custid ends in 8
     private boolean accept(String msg) {
       JsonReader jsonReader = Json.createReader(new StringReader(msg));
       JsonObject myJsonObject = jsonReader.readObject();   
@@ -111,7 +113,7 @@ public class MyStreamSubscriber {
       return isit8;
     }
 
-    // transform the message
+    // // transform the message
     private String transform(String msg) {
       JsonReader jsonReader = Json.createReader(new StringReader(msg));
       JsonObject myJsonObject = jsonReader.readObject();   

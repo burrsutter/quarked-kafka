@@ -20,8 +20,8 @@ public class MyStreamPublisher {
 
     @Outgoing("mystream")
     public Flowable<String> generate() {
-        return Flowable.interval(1, TimeUnit.SECONDS)
-                .map(msg -> cnt++ + " stuff ");
+        return Flowable.interval(1000, TimeUnit.MILLISECONDS)
+          .map(msg -> "{\"message\":\"stuff-" + cnt++ +"\"}");
     }
     
 }
