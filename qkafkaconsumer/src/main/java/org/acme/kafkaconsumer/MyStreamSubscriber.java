@@ -64,7 +64,7 @@ public class MyStreamSubscriber {
     // @Outgoing("output")
     // public String process(String input) {
     //   LOG.info("INPUT4: " + input);
-    //   return input;
+    //   return input; // just mapping in to out
     // }
     
     // Allows you to see any errors
@@ -90,11 +90,10 @@ public class MyStreamSubscriber {
     //     ;
     // }
 
-    // skip messages that have a customer id ending in '8'
+    // only messages that have a customer id ending in '8'
     @Incoming("input")
     @Outgoing("output")
     public Flowable<String> process(Flowable<String> input) {      
-      // return input;
       return input  
         .filter(stuff -> accept(stuff))
         .map(stuff -> transform(stuff))        
