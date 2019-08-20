@@ -78,6 +78,28 @@ public class MyStreamSubscriber {
     //     ;
     // }
 
+    // simple transformation
+    @Incoming("input")
+    @Outgoing("output")
+    public Flowable<String> process(Flowable<String> input) {      
+      return input          
+        .map(stuff -> simpletransform(stuff))        
+        .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
+        .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
+        ;
+    }
+
+    private String simpletransform(String msg) {
+      JsonReader jsonReader = Json.createReader(new StringReader(msg));
+      JsonObject myJsonObject = jsonReader.readObject();   
+      String id = myJsonObject.getString("message");
+      JsonObjectBuilder builder = Json.createObjectBuilder();   
+      builder.add("whatever", "dude");
+      return builder.build().toString();
+    }
+
+
+
     // skip messages that have a customer id ending in '8'
     // @Incoming("input")
     // @Outgoing("output")
@@ -89,18 +111,18 @@ public class MyStreamSubscriber {
     //     .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
     //     ;
     // }
-
+    
     // only messages that have a customer id ending in '8'
-    @Incoming("input")
-    @Outgoing("output")
-    public Flowable<String> process(Flowable<String> input) {      
-      return input  
-        .filter(stuff -> accept(stuff))
-        .map(stuff -> transform(stuff))        
-        .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
-        .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
-        ;
-    }    
+    // @Incoming("input")
+    // @Outgoing("output")
+    // public Flowable<String> process(Flowable<String> input) {      
+    //   return input  
+    //     .filter(stuff -> accept(stuff))
+    //     .map(stuff -> transform(stuff))        
+    //     .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
+    //     .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
+    //     ;
+    // }    
 
     // // accept only messages where custid ends in 8
     private boolean accept(String msg) {

@@ -6,6 +6,11 @@ Docker for Mac or Docker for Windows
 docker-compose up
 This leverages the docker-compose.yaml file to start a "local" zookeeper + Apache Kafka broker on ports 2181 and 9092
 
+kafkacat -P -b localhost -t my-topic
+
+kafkacat -C -b localhost -t my-topic
+
+
 2. Terminal 2 - producer to atopic
 cd qrestkafkaproducer
 mvn quarkus:dev
