@@ -15,7 +15,7 @@ import javax.websocket.server.ServerEndpoint;
 
 
 /*
-Receives Kafka message, outputs to Websocket, all connected browsers
+Receives Kafka message on atopic, outputs to Websocket, all connected browsers
 */
 
 @ServerEndpoint("/endpoint")
@@ -51,7 +51,7 @@ public class MyStreamSubscriber {
  
     @Incoming("mystream")
     public void process(String msg) {
-        LOG.info(msg);
+        LOG.info("RECEIVED: " + msg);
         broadcast(msg);
     }     
 

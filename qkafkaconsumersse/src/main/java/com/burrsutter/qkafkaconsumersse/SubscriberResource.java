@@ -5,8 +5,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import io.smallrye.reactive.messaging.annotations.Stream;
+
 import org.reactivestreams.Publisher;
+
+import io.smallrye.reactive.messaging.annotations.Stream;
 
 @Path("/")
 public class SubscriberResource {

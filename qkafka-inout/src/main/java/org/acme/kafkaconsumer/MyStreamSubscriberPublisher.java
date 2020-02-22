@@ -42,7 +42,7 @@ public class MyStreamSubscriberPublisher {
     /* simple log */
     // @Incoming("input")
     // public void process(String msg) {
-    //     LOG.info("INPUTBurr: " + msg);
+    //     LOG.info("INPUT Fred: " + msg);
     // }     
     
     // @Incoming("input")
@@ -79,26 +79,25 @@ public class MyStreamSubscriberPublisher {
     // }
 
     /* simple transformation */
-    @Incoming("input")
-    @Outgoing("output")
-    public Flowable<String> process(Flowable<String> input) {      
-      return input          
-        .map(stuff -> simpletransform(stuff))        
-        .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
-        .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
-        ;
-    }
+    // @Incoming("input")
+    // @Outgoing("output")
+    // public Flowable<String> process(Flowable<String> input) {      
+    //   return input          
+    //     .map(stuff -> simpletransform(stuff))        
+    //     .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
+    //     .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
+    //     ;
+    // }
 
-    private String simpletransform(String msg) {
-      JsonReader jsonReader = Json.createReader(new StringReader(msg));
-      JsonObject myJsonObject = jsonReader.readObject();   
-      String id = myJsonObject.getString("id");      
-      System.out.println(id);
-      JsonObjectBuilder builder = Json.createObjectBuilder();   
-      builder.add("whateva", "dude");    
-      return builder.build().toString();
-    }
-
+    // private String simpletransform(String msg) {
+    //   JsonReader jsonReader = Json.createReader(new StringReader(msg));
+    //   JsonObject myJsonObject = jsonReader.readObject();   
+    //   String id = myJsonObject.getString("id");      
+    //   System.out.println(id);
+    //   JsonObjectBuilder builder = Json.createObjectBuilder();   
+    //   builder.add("hey", "ya'll");    
+    //   return builder.build().toString();
+    // }
 
 
     /* skip messages that have a customer id ending in '8' */
@@ -106,7 +105,7 @@ public class MyStreamSubscriberPublisher {
     // @Outgoing("output")
     // public Flowable<String> process(Flowable<String> input) {      
     //   // return input;
-    //   return input  
+    //   return input        
     //     .filter(stuff -> (Json.createReader(new StringReader(stuff)).readObject().getString("id")).endsWith("8"))        
     //     .doOnNext(json -> System.out.println("INPUT6: " + json + "\n"))
     //     .doOnError(e -> System.out.println("ERROR6: " + e + "\n"))
@@ -125,7 +124,7 @@ public class MyStreamSubscriberPublisher {
     //     ;
     // }    
 
-    /* accept only messages where custid ends in 8 */
+    // /* accept only messages where custid ends in 8 */
     // private boolean accept(String msg) {
     //   JsonReader jsonReader = Json.createReader(new StringReader(msg));
     //   JsonObject myJsonObject = jsonReader.readObject();   
@@ -135,7 +134,7 @@ public class MyStreamSubscriberPublisher {
     //   return isit8;
     // }
 
-    /* transform the message */
+    // /* transform the message */
     // private String transform(String msg) {
     //   JsonReader jsonReader = Json.createReader(new StringReader(msg));
     //   JsonObject myJsonObject = jsonReader.readObject();   
@@ -167,64 +166,67 @@ public class MyStreamSubscriberPublisher {
     // }    
     
     
-    // @Incoming("input")
-    // @Outgoing("output")
-    // public String transform(String input) {
-    //   LOG.info("INPUT8: " + input);
+    /* Augment inbound message with customer string "special K" 
+       and inject extend prices
+    */
+    @Incoming("input")
+    @Outgoing("output")
+    public String transform(String input) {
+      LOG.info("INPUT8: " + input);
 
-    //   JsonReader jsonReader = Json.createReader(new StringReader(input));
-    //   JsonObject myJsonObject = jsonReader.readObject();   
+      JsonReader jsonReader = Json.createReader(new StringReader(input));
+      JsonObject myJsonObject = jsonReader.readObject();   
     
       
-    //   JsonObjectBuilder mainBuilder = Json.createObjectBuilder();   
-    //   mainBuilder.add("id",myJsonObject.getString("id"));
-    //   // new classification
-    //   mainBuilder.add("class", "Special K Customer");
+      JsonObjectBuilder mainBuilder = Json.createObjectBuilder();   
+      mainBuilder.add("id",myJsonObject.getString("id"));
+      // new classification
+      mainBuilder.add("class", "Special K Customer");
 
-    //   JsonArrayBuilder orderArrayBuilder = Json.createArrayBuilder();
-    //   JsonObjectBuilder orderBuilder = Json.createObjectBuilder();
+      JsonArrayBuilder orderArrayBuilder = Json.createArrayBuilder();
+      JsonObjectBuilder orderBuilder = Json.createObjectBuilder();
             
 
-    //   JsonArray theOrders = myJsonObject.getJsonArray("orders");
-    //   LOG.info("theOrders: " + theOrders);
+      JsonArray theOrders = myJsonObject.getJsonArray("orders");
+      LOG.info("theOrders: " + theOrders);
       
-    //   double orderTotal = 0;
+      double orderTotal = 0;
 
-    //   for(int i= 0; i < theOrders.size(); i++) {
-    //     JsonValue item = theOrders.get(i);
-    //     int qty = item.asJsonObject().getInt("qty");
-    //     System.out.print("qty:" + qty);
-    //     JsonNumber priceAsJson = item.asJsonObject().getJsonNumber("price");
-    //     BigDecimal price = priceAsJson.bigDecimalValue();
-    //     System.out.println(" price: " + price);
-    //     orderBuilder
-    //       .add("id", item.asJsonObject().getInt("id"))
-    //       .add("itemid", item.asJsonObject().getString("itemid"))
-    //       .add("description", item.asJsonObject().getString("description"))
-    //       .add("qty", item.asJsonObject().getInt("qty"))
-    //       .add("price",item.asJsonObject().getJsonNumber("price"));
-    //       // new extended price
-    //       double extendedPrice = qty * price.doubleValue();
-    //     orderBuilder  
-    //       .add("extended", extendedPrice);
+      for(int i= 0; i < theOrders.size(); i++) {
+        JsonValue item = theOrders.get(i);
+        int qty = item.asJsonObject().getInt("qty");
+        System.out.print("qty:" + qty);
+        JsonNumber priceAsJson = item.asJsonObject().getJsonNumber("price");
+        BigDecimal price = priceAsJson.bigDecimalValue();
+        System.out.println(" price: " + price);
+        orderBuilder
+          .add("id", item.asJsonObject().getInt("id"))
+          .add("itemid", item.asJsonObject().getString("itemid"))
+          .add("description", item.asJsonObject().getString("description"))
+          .add("qty", item.asJsonObject().getInt("qty"))
+          .add("price",item.asJsonObject().getJsonNumber("price"));
+          // new extended price
+          double extendedPrice = qty * price.doubleValue();
+        orderBuilder  
+          .add("extended", extendedPrice);
       
-    //     orderArrayBuilder.add(orderBuilder.build());
-    //     orderTotal = orderTotal + extendedPrice;
+        orderArrayBuilder.add(orderBuilder.build());
+        orderTotal = orderTotal + extendedPrice;
         
-    //   }
+      }
       
-    //   LOG.info("TWO");
+      LOG.info("TWO");
 
-    //   mainBuilder.add("orderTotal", orderTotal);
-    //   mainBuilder.add("orders",orderArrayBuilder.build());
+      mainBuilder.add("orderTotal", orderTotal);
+      mainBuilder.add("orders",orderArrayBuilder.build());
 
-    //   JsonObject newJson = mainBuilder.build();
+      JsonObject newJson = mainBuilder.build();
       
-    //   String newJsonAsString = newJson.toString();
-    //   LOG.info("OUTPUT8: " + newJsonAsString);
+      String newJsonAsString = newJson.toString();
+      LOG.info("OUTPUT8: " + newJsonAsString);
 
-    //   return newJsonAsString;
-    // }    
+      return newJsonAsString;
+    }    
 
 }
 

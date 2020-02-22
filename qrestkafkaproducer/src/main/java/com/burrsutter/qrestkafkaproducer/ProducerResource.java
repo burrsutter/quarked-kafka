@@ -44,6 +44,7 @@ public class ProducerResource {
         .build();
 
         emitter.send(customer.toString());
+        System.out.println("SENT: " + customer.toString());
         return customer;
     }
 }
