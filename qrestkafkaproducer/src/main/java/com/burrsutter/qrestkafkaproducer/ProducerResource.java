@@ -9,13 +9,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import io.smallrye.reactive.messaging.annotations.Emitter;
-import io.smallrye.reactive.messaging.annotations.Stream;
-
+// import io.smallrye.reactive.messaging.annotations.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+// import io.smallrye.reactive.messaging.annotations.Stream;
+import org.eclipse.microprofile.reactive.messaging.Channel;
 
 @Path("/produce")
 public class ProducerResource {
-    @Inject @Stream("mystream")
+    @Inject @Channel("mystream")
     Emitter<String> emitter;
     private int cnt;
 

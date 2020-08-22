@@ -8,12 +8,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.reactivestreams.Publisher;
 
-import io.smallrye.reactive.messaging.annotations.Stream;
+import org.eclipse.microprofile.reactive.messaging.Channel;
 
 @Path("/")
 public class SubscriberResource {
     @Inject
-    @Stream("mystream") Publisher<String> messages;
+    @Channel("mystream") Publisher<String> messages;
 
     @GET
     @Path("/hello")

@@ -4,10 +4,10 @@ import javax.enterprise.context.ApplicationScoped;
 import org.jboss.logging.Logger;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-import io.smallrye.reactive.messaging.kafka.KafkaMessage;
+
 
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.*;
