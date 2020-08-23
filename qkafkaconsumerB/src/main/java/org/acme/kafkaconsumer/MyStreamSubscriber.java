@@ -1,16 +1,16 @@
 package org.acme.kafkaconsumer;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.json.JsonObject;
+// import javax.json.JsonObject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import org.eclipse.microprofile.metrics.annotation.Counted;
+// import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Outgoing;
+// import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.jboss.logging.Logger;
 
-import io.reactivex.Flowable;
+// import io.reactivex.Flowable;
 
 @ApplicationScoped
 @Path("/")
